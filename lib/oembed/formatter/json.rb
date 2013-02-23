@@ -3,7 +3,7 @@ module OEmbed
     # Handles parsing JSON values using the best available backend.
     module JSON
       # A Array of all available backends, listed in order of preference.
-      DECODERS = %w(ActiveSupportJSON JSONGem Yaml)
+      DECODERS = %w(ActiveSupportJSON JSONGem Yaml OkJson)
       
       class << self
         include ::OEmbed::Formatter::Base
