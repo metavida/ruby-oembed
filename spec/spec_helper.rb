@@ -39,6 +39,7 @@ module OEmbedSpecHelper
         "type" => "photo",
         "version" => "1.0",
         "fields" => "hello",
+        "title" => "\u202ehello\u202c",
         "__id__" => 1234
       }
     when 'json'
@@ -47,6 +48,7 @@ module OEmbedSpecHelper
           "type": "photo",
           "version": "1.0",
           "fields": "hello",
+          "title": "\u202ehello\u202c",
           "__id__": 1234
         }
       JSON
@@ -57,6 +59,7 @@ module OEmbedSpecHelper
         	<type>photo</type>
         	<version>1.0</version>
         	<fields>hello</fields>
+          <title>\u202ehello\u202c</title>
         	<__id__>1234</__id__>
         </oembed>
       XML

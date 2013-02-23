@@ -35,7 +35,7 @@
       server:
       - YTS/1.20.9
     body: ! '{"version":"1.0","type":"photo","author_url":"http:\/\/www.flickr.com\/photos\/bees\/","cache_age":3600,"provider_name":"Flickr","provider_url":"http:\/\/www.flickr.com\/","title":"Bacon
-      Lollys","author_name":"\u202e\u202d\u202cbees\u202c","width":"500","height":"375","url":"http:\/\/farm4.staticflickr.com\/3040\/2362225867_4a87ab8baf.jpg"}
+      Lollys","author_name":"bees","width":"500","height":"375","url":"http:\/\/farm4.staticflickr.com\/3040\/2362225867_4a87ab8baf.jpg"}
 
 '
     http_version: '1.1'
