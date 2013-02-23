@@ -1,5 +1,10 @@
 = CHANGELOG
 
+== Unreleased
+
+* Removed the YAML-powered JSON parsing backend for security reasons (Marcos Wright Kuhns)
+* Added an OkJson-powered JSON parsing backend so that ruby-oembed can continue working without any dependencies on external gems (Marcos Wright Kuhns)
+
 == 0.8.8 - 18 November 2012
 
 * OEmbed::Response::Photo#html now includes alt attribute; Pull #23 & #25 (François de Metz)
