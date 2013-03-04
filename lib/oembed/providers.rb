@@ -44,8 +44,18 @@ module OEmbed
       # Register all Providers built into this gem.
       # The including_sub_type parameter should be one of the following values:
       # * :aggregators: also register provider aggregator endpoints, like Embedly
+      #
+      # The options Hash recognizes the following keys:
+      # * :only_given:: If true, do not also register all of the default Providers
+      #
+      # A common example:
+      #  OEmbed::Providers.register_all(:https, :only_given=>true)
       def register_all(*including_sub_type)
-        register(*@@to_register[""])
+        options_hash = including_sub_type.last.is_a?(Hash) ?
+          including_sub_type.pop :
+          {}
+        
+        register(*@@to_register[""]) unless options_hash[:only_given]
         including_sub_type.each do |sub_type|
           register(*@@to_register[sub_type.to_s])
         end

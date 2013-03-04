@@ -193,6 +193,7 @@ describe OEmbed::Providers do
   describe ".register_all" do
     after(:each) do
       OEmbed::Providers.send(:remove_const, :Fake) if defined?(OEmbed::Providers::Fake)
+      OEmbed::Providers.send(:remove_const, :Real) if defined?(OEmbed::Providers::Real)
     end
     
     it "should not register a provider that is not marked as official" do
@@ -252,6 +253,53 @@ describe OEmbed::Providers do
           provider = OEmbed::Providers.find(url)
           provider.should be_a(OEmbed::Provider)
         end
+      end
+    end
+    
+    it "should add root level providers along with and sub_type providers at the same time, by default" do
+      defined?(OEmbed::Providers::Fake).should_not be
+      defined?(OEmbed::Providers::Real).should_not be
+        
+      class OEmbed::Providers
+        Real = OEmbed::Provider.new("http://official.re.al/oembed/")
+        Real << "http://official.re.al/*"
+        add_official_provider(Real)
+          
+        Fake = OEmbed::Provider.new("http://sub.fa.ke/oembed/")
+        Fake << "http://sub.fa.ke/*"
+        add_official_provider(Fake, :fakes)
+      end
+        
+      OEmbed::Providers.register_all(:fakes)
+      ["http://official.re.al/20C285E0", "http://sub.fa.ke/20C285E0"].each do |url|
+        provider = OEmbed::Providers.find(url)
+        provider.should be_a(OEmbed::Provider)
+      end
+    end
+    
+    it "should obey the :only_given option" do
+      defined?(OEmbed::Providers::Fake).should_not be
+      defined?(OEmbed::Providers::Real).should_not be
+        
+      class OEmbed::Providers
+        Real = OEmbed::Provider.new("http://official.re.al/oembed/")
+        Real << "http://official.re.al/*"
+        add_official_provider(Real)
+        
+        Fake = OEmbed::Provider.new("http://sub.fa.ke/oembed/")
+        Fake << "http://sub.fa.ke/*"
+        add_official_provider(Fake, :fakes)
+      end
+        
+      OEmbed::Providers.register_all(:fakes, :only_given=>true)
+      ["http://official.re.al/20C285E0"].each do |url|
+        provider = OEmbed::Providers.find(url)
+        provider.should_not be_a(OEmbed::Provider)
+      end
+      
+      ["http://sub.fa.ke/20C285E0"].each do |url|
+        provider = OEmbed::Providers.find(url)
+        provider.should be_a(OEmbed::Provider)
       end
     end
   end
