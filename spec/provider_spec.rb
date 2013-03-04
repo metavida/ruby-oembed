@@ -219,7 +219,7 @@ describe OEmbed::Provider do
       uri.host.should == "www.flickr.com"
       uri.path.should == "/services/oembed/"
       uri.query.include?("format=#{@flickr.format}").should be_true
-      uri.query.include?("url=#{CGI.escape 'http://flickr.com/photos/bees/2362225867/'}").should be_true
+      uri.query.include?("url=#{CGI.escape 'http://www.flickr.com/photos/lawa/8263161881'}").should be_true
 
       uri = @qik.send(:build, example_url(:qik))
       uri.host.should == "qik.com"
