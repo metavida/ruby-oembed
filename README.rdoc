@@ -43,7 +43,7 @@ Last but not least, ruby-oembed supports both {oohEmbed}[http://oohembed.com] an
 
 == Formatters
 
-This library works wonderfully on its own, but can get a speed boost by using 3rd party libraries to parse oEmbed data. To use a 3rd party Formatter, just be sure to require the library _before_ ruby-oembed.
+This library works wonderfully on its own, with no dependencies, but can get a speed boost by using 3rd party libraries to parse oEmbed data. To use a 3rd party Formatter, just be sure to require the library _before_ ruby-oembed.
 
   require 'json'
   require 'xmlsimple'
@@ -56,6 +56,8 @@ The following, optional, backends are currently supported:
 * The {JSON implementation for Ruby}[http://flori.github.com/json/]
 * Rails' ActiveSupport::JSON (confirmed to work with Rails 3.0.x and should work with Rails 2.0+)
 * {XmlSimple}[http://xml-simple.rubyforge.org/]
+
+**Note:** The built-in JSON Formatter (OkJson) has exhibited some problems in parsing certain UTF8 strings. If you're seeing unexpected OEmbed::ParseError errors in your application, try using another JSON Formatter.
 
 = Lend a Hand
 
@@ -78,7 +80,7 @@ We do our best to {keep our tests green}[http://travis-ci.org/metavida/ruby-oemb
 
 = Contributors
 
-Thanks to {all who have made contributions}[https://github.com/judofyr/ruby-oembed/contributors] to this gem, both large and small.
+Thanks to {all who have made contributions}[https://github.com/judofyr/ruby-oembed/contributors] to this library, both large and small.
 
 = License
 
