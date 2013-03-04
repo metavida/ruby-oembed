@@ -154,10 +154,6 @@ module OEmbed
     Flickr << "http://*.flickr.com/*"
     add_official_provider(Flickr)
 
-    FlickrHttps = OEmbed::Provider.new("https://www.flickr.com/services/oembed/")
-    FlickrHttps << "http://*.flickr.com/*"
-    add_official_provider(FlickrHttps, :https)
-
     # Provider for viddler.com
     # http://developers.viddler.com/documentation/services/oembed/
     Viddler = OEmbed::Provider.new("http://lab.viddler.com/services/oembed/")
