@@ -26,6 +26,15 @@ describe "OEmbed::Formatter::JSON::Backends::OkJson" do
     decoded.values.map{|v|v.to_s}.should == valid_response(:object).values.map{|v|v.to_s}
   end
   
+  it "should currently fail, for unknown reasons, given certain UTF8 characters" do
+    # NOTE: You can test this in the "real-world" using the following steps
+    #     OEmbed::Formatter::JSON.backend = 'OkJson'
+    #     OEmbed::Providers::Flickr.get 'http://flickr.com/photos/bees/2362225867/' #=> OEmbed::ParseError
+    lambda {
+      OEmbed::Formatter.decode(:json, example_body(:flickr_utf8))
+    }.should raise_error(OEmbed::ParseError)
+  end
+  
   it "should raise an OEmbed::ParseError when decoding an invalid JSON String" do
     lambda {
       decode = OEmbed::Formatter.decode(:json, invalid_response('unclosed_container', :json))

@@ -32,6 +32,12 @@ describe "OEmbed::Formatter::JSON::Backends::JSONGem" do
     decoded.values.map{|v|v.to_s}.should == valid_response(:object).values.map{|v|v.to_s}
   end
   
+  it "should not fail, given certain UTF8 characters" do
+    lambda {
+      OEmbed::Formatter.decode(:json, example_body(:flickr_utf8))
+    }.should_not raise_error(OEmbed::ParseError)
+  end
+  
   it "should raise an OEmbed::ParseError when decoding an invalid JSON String" do
     lambda {
       decode = OEmbed::Formatter.decode(:json, invalid_response('unclosed_container', :json))
