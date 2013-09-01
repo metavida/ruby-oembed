@@ -16,13 +16,13 @@ Gem::Specification.new do |s|
   s.email = "arisbartee@gmail.com"
   s.homepage = "http://github.com/judofyr/ruby-oembed"
   s.licenses = ["MIT"]
-  
+
   s.files = `git ls-files`.split("\n")
   s.test_files = s.files.grep(%r{^(test|spec|features,integration_test)/})
-  
+
   s.rdoc_options = ["--main", "README.rdoc", "--title", "ruby-oembed-#{OEmbed::Version}", "--inline-source", "--exclude", "tasks", "CHANGELOG.rdoc"]
   s.extra_rdoc_files = s.files.grep(%r{\.rdoc$}) + %w{LICENSE}
-  
+
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.19"
   s.summary = "oEmbed for Ruby"

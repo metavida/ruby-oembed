@@ -48,7 +48,7 @@ This library works wonderfully on its own, with no dependencies, but can get a s
   require 'json'
   require 'xmlsimple'
   require 'oembed'
-  
+
   OEmbed::Formatter::JSON.backend #=> OEmbed::Formatter::JSON::Backends::JSONGem
   OEmbed::Formatter::XML.backend  #=> OEmbed::Formatter::XML::Backends::XmlSimple
 
@@ -71,6 +71,10 @@ Code for the ruby-oembed library is {hosted on GitHub}[https://github.com/judofy
   bundle install
   # Run the tests.
   bundle exec rake
+
+Note: If during the `bundle install`, the installation of nokogiri is taking a long time (> a minute or two), try manually installing the gem using the following:
+
+  env NOKOGIRI_USE_SYSTEM_LIBRARIES=true bundle install
 
 If you encounter any bug, feel free to {create an Issue}[https://github.com/judofyr/ruby-oembed/issues].
 
