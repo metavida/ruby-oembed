@@ -33,7 +33,7 @@ module OEmbed
     module JSON
       module Backends
         module OkJson
-# The following code is via https://raw.github.com/kr/okjson/bdd1113802f48ae21ddc9585b5b93b0058527d14/okjson.rb
+# The following code is via https://raw.github.com/kr/okjson/467b1fd7ae47b873c8bcb86bea1e2d3009ce5fd9/okjson.rb
 
 # encoding: UTF-8
 #
@@ -65,7 +65,7 @@ require 'stringio'
 # http://golang.org/src/pkg/json/decode.go and
 # http://golang.org/src/pkg/utf8/utf8.go
 module OkJson
-  Upstream = 'LTD7LBKLZWFF7OZK'
+  Upstream = '43'
   extend self
 
 
@@ -87,12 +87,49 @@ module OkJson
   end
 
 
+  # Encodes x into a json text. It may contain only
+  # Array, Hash, String, Numeric, true, false, nil.
+  # (Note, this list excludes Symbol.)
+  # X itself must be an Array or a Hash.
+  # No other value can be encoded, and an error will
+  # be raised if x contains any other value, such as
+  # Nan, Infinity, Symbol, and Proc, or if a Hash key
+  # is not a String.
+  # Strings contained in x must be valid UTF-8.
+  def encode(x)
+    case x
+    when Hash    then objenc(x)
+    when Array   then arrenc(x)
+    else
+      raise Error, 'root value must be an Array or a Hash'
+    end
+  end
+
+
+  def valenc(x)
+    case x
+    when Hash    then objenc(x)
+    when Array   then arrenc(x)
+    when String  then strenc(x)
+    when Numeric then numenc(x)
+    when true    then "true"
+    when false   then "false"
+    when nil     then "null"
+    else
+      raise Error, "cannot encode #{x.class}: #{x.inspect}"
+    end
+  end
+
+
+private
+
+
   # Parses a "json text" in the sense of RFC 4627.
   # Returns the parsed value and any trailing tokens.
   # Note: this is almost the same as valparse,
   # except that it does not accept atomic values.
   def textparse(ts)
-    if ts.length < 0
+    if ts.length <= 0
       raise Error, 'empty'
     end
 
@@ -109,7 +146,7 @@ module OkJson
   # Parses a "value" in the sense of RFC 4627.
   # Returns the parsed value and any trailing tokens.
   def valparse(ts)
-    if ts.length < 0
+    if ts.length <= 0
       raise Error, 'empty'
     end
 
@@ -238,21 +275,19 @@ module OkJson
   # it is the lexeme.
   def tok(s)
     case s[0]
-    when ?{  then ['{', s[0,1], s[0,1]]
-    when ?}  then ['}', s[0,1], s[0,1]]
-    when ?:  then [':', s[0,1], s[0,1]]
-    when ?,  then [',', s[0,1], s[0,1]]
-    when ?[  then ['[', s[0,1], s[0,1]]
-    when ?]  then [']', s[0,1], s[0,1]]
-    when ?n  then nulltok(s)
-    when ?t  then truetok(s)
-    when ?f  then falsetok(s)
-    when ?"  then strtok(s)
-    when Spc then [:space, s[0,1], s[0,1]]
-    when ?\t then [:space, s[0,1], s[0,1]]
-    when ?\n then [:space, s[0,1], s[0,1]]
-    when ?\r then [:space, s[0,1], s[0,1]]
-    else          numtok(s)
+    when ?{ then ['{', s[0,1], s[0,1]]
+    when ?} then ['}', s[0,1], s[0,1]]
+    when ?: then [':', s[0,1], s[0,1]]
+    when ?, then [',', s[0,1], s[0,1]]
+    when ?[ then ['[', s[0,1], s[0,1]]
+    when ?] then [']', s[0,1], s[0,1]]
+    when ?n then nulltok(s)
+    when ?t then truetok(s)
+    when ?f then falsetok(s)
+    when ?" then strtok(s)
+    when Spc, ?\t, ?\n, ?\r then [:space, s[0,1], s[0,1]]
+    else
+      numtok(s)
     end
   end
 
@@ -265,12 +300,12 @@ module OkJson
   def numtok(s)
     m = /-?([1-9][0-9]+|[0-9])([.][0-9]+)?([eE][+-]?[0-9]+)?/.match(s)
     if m && m.begin(0) == 0
-      if m[3] && !m[2]
-        [:val, m[0], Integer(m[1])*(10**Integer(m[3][1..-1]))]
+      if !m[2] && !m[3]
+        [:val, m[0], Integer(m[0])]
       elsif m[2]
         [:val, m[0], Float(m[0])]
       else
-        [:val, m[0], Integer(m[0])]
+        [:val, m[0], Integer(m[1])*(10**Integer(m[3][1..-1]))]
       end
     else
       []
@@ -302,17 +337,14 @@ module OkJson
   def unquote(q)
     q = q[1...-1]
     a = q.dup # allocate a big enough string
-    rubydoesenc = false
     # In ruby >= 1.9, a[w] is a codepoint, not a byte.
-    if a.class.method_defined?(:force_encoding)
+    if rubydoesenc?
       a.force_encoding('UTF-8')
-      rubydoesenc = true
     end
     r, w = 0, 0
     while r < q.length
       c = q[r]
-      case true
-      when c == ?\\
+      if c == ?\\
         r += 1
         if r >= q.length
           raise Error, "string literal ends with a \"\\\": \"#{q}\""
@@ -345,7 +377,7 @@ module OkJson
               end
             end
           end
-          if rubydoesenc
+          if rubydoesenc?
             a[w] = '' << uchar
             w += 1
           else
@@ -354,7 +386,7 @@ module OkJson
         else
           raise Error, "invalid escape char #{q[r]} in \"#{q}\""
         end
-      when c == ?", c < Spc
+      elsif c == ?" || c < Spc
         raise Error, "invalid character in string literal \"#{q}\""
       else
         # Copy anything else byte-for-byte.
@@ -375,15 +407,14 @@ module OkJson
   # bytes in string a at position i.
   # Returns the number of bytes written.
   def ucharenc(a, i, u)
-    case true
-    when u <= Uchar1max
+    if u <= Uchar1max
       a[i] = (u & 0xff).chr
       1
-    when u <= Uchar2max
+    elsif u <= Uchar2max
       a[i+0] = (Utag2 | ((u>>6)&0xff)).chr
       a[i+1] = (Utagx | (u&Umaskx)).chr
       2
-    when u <= Uchar3max
+    elsif u <= Uchar3max
       a[i+0] = (Utag3 | ((u>>12)&0xff)).chr
       a[i+1] = (Utagx | ((u>>6)&Umaskx)).chr
       a[i+2] = (Utagx | (u&Umaskx)).chr
@@ -420,46 +451,11 @@ module OkJson
 
 
   def nibble(c)
-    case true
-    when ?0 <= c && c <= ?9 then c.ord - ?0.ord
-    when ?a <= c && c <= ?z then c.ord - ?a.ord + 10
-    when ?A <= c && c <= ?Z then c.ord - ?A.ord + 10
+    if ?0 <= c && c <= ?9 then c.ord - ?0.ord
+    elsif ?a <= c && c <= ?z then c.ord - ?a.ord + 10
+    elsif ?A <= c && c <= ?Z then c.ord - ?A.ord + 10
     else
       raise Error, "invalid hex code #{c}"
-    end
-  end
-
-
-  # Encodes x into a json text. It may contain only
-  # Array, Hash, String, Numeric, true, false, nil.
-  # (Note, this list excludes Symbol.)
-  # X itself must be an Array or a Hash.
-  # No other value can be encoded, and an error will
-  # be raised if x contains any other value, such as
-  # Nan, Infinity, Symbol, and Proc, or if a Hash key
-  # is not a String.
-  # Strings contained in x must be valid UTF-8.
-  def encode(x)
-    case x
-    when Hash    then objenc(x)
-    when Array   then arrenc(x)
-    else
-      raise Error, 'root value must be an Array or a Hash'
-    end
-  end
-
-
-  def valenc(x)
-    case x
-    when Hash    then objenc(x)
-    when Array   then arrenc(x)
-    when String  then strenc(x)
-    when Numeric then numenc(x)
-    when true    then "true"
-    when false   then "false"
-    when nil     then "null"
-    else
-      raise Error, "cannot encode #{x.class}: #{x.inspect}"
     end
   end
 
@@ -488,9 +484,6 @@ module OkJson
     t.putc(?")
     r = 0
 
-    # In ruby >= 1.9, s[r] is a codepoint, not a byte.
-    rubydoesenc = s.class.method_defined?(:encoding)
-
     while r < s.length
       case s[r]
       when ?"  then t.print('\\"')
@@ -502,15 +495,20 @@ module OkJson
       when ?\t then t.print('\\t')
       else
         c = s[r]
-        case true
-        when rubydoesenc
+        # In ruby >= 1.9, s[r] is a codepoint, not a byte.
+        if rubydoesenc?
           begin
-            c.ord # will raise an error if c is invalid UTF-8
+            # c.ord will raise an error if c is invalid UTF-8
+            if c.ord < Spc.ord
+              c = "\\u%04x" % [c.ord]
+            end
             t.write(c)
           rescue
             t.write(Ustrerr)
           end
-        when Spc <= c && c <= ?~
+        elsif c < Spc
+          t.write("\\u%04x" % c)
+        elsif Spc <= c && c <= ?~
           t.putc(c)
         else
           n = ucharcopy(t, s, r) # ensure valid UTF-8 output
@@ -602,6 +600,11 @@ module OkJson
   end
 
 
+  def rubydoesenc?
+    ::String.method_defined?(:force_encoding)
+  end
+
+
   class Utf8Error < ::StandardError
   end
 
@@ -610,15 +613,15 @@ module OkJson
   end
 
 
-  Utagx = 0x80 # 1000 0000
-  Utag2 = 0xc0 # 1100 0000
-  Utag3 = 0xe0 # 1110 0000
-  Utag4 = 0xf0 # 1111 0000
-  Utag5 = 0xF8 # 1111 1000
-  Umaskx = 0x3f # 0011 1111
-  Umask2 = 0x1f # 0001 1111
-  Umask3 = 0x0f # 0000 1111
-  Umask4 = 0x07 # 0000 0111
+  Utagx = 0b1000_0000
+  Utag2 = 0b1100_0000
+  Utag3 = 0b1110_0000
+  Utag4 = 0b1111_0000
+  Utag5 = 0b1111_1000
+  Umaskx = 0b0011_1111
+  Umask2 = 0b0001_1111
+  Umask3 = 0b0000_1111
+  Umask4 = 0b0000_0111
   Uchar1max = (1<<7) - 1
   Uchar2max = (1<<11) - 1
   Uchar3max = (1<<16) - 1
