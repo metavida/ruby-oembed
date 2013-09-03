@@ -27,38 +27,36 @@ Gem::Specification.new do |s|
   s.rubygems_version = "1.8.19"
   s.summary = "oEmbed for Ruby"
 
+  dev_dependencies = [
+    [%q<rake>, [">= 0"]],
+    [%q<json>, [">= 0"]],
+    [%q<xml-simple>, [">= 0"]],
+    # New versions of nokogiri don't support Ruby 1.8.x
+    (Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('1.9') ?
+      [%q<nokogiri>, [">= 0"]] :
+      [%q<nokogiri>, ["~>1.5.0"]]
+    ),
+    [%q<rspec>, [">= 2.0"]],
+    [%q<vcr>, ["~> 1.0"]],
+    [%q<fakeweb>, [">= 0"]],
+  ]
+
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rake>, ">= 0")
-      s.add_development_dependency(%q<json>, ">= 0")
-      s.add_development_dependency(%q<xml-simple>, ">= 0")
-      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('1.9')
-        s.add_development_dependency(%q<nokogiri>, ">= 0")
-      else
-        s.add_development_dependency(%q<nokogiri>, "~>1.5.0")
+      dev_dependencies.each do |gem|
+        s.add_development_dependency(*gem)
       end
-      s.add_development_dependency(%q<rspec>, ">= 2.0")
-      s.add_development_dependency(%q<vcr>, "~> 1.0")
-      s.add_development_dependency(%q<fakeweb>, ">= 0")
     else
-      s.add_dependency(%q<rake>, [">= 0"])
-      s.add_dependency(%q<json>, [">= 0"])
-      s.add_dependency(%q<xml-simple>, [">= 0"])
-      s.add_dependency(%q<nokogiri>, [">= 0"])
-      s.add_dependency(%q<rspec>, [">= 2.0"])
-      s.add_dependency(%q<vcr>, ["~> 1.0"])
-      s.add_dependency(%q<fakeweb>, [">= 0"])
+      dev_dependencies.each do |gem|
+        s.add_dependency(*gem)
+      end
     end
   else
-    s.add_dependency(%q<rake>, [">= 0"])
-    s.add_dependency(%q<json>, [">= 0"])
-    s.add_dependency(%q<xml-simple>, [">= 0"])
-    s.add_dependency(%q<nokogiri>, [">= 0"])
-    s.add_dependency(%q<rspec>, [">= 2.0"])
-    s.add_dependency(%q<vcr>, ["~> 1.0"])
-    s.add_dependency(%q<fakeweb>, [">= 0"])
+    dev_dependencies.each do |gem|
+      s.add_dependency(*gem)
+    end
   end
 end
 
