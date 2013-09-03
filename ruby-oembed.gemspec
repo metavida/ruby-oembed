@@ -31,13 +31,17 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rake>, [">= 0"])
-      s.add_development_dependency(%q<json>, [">= 0"])
-      s.add_development_dependency(%q<xml-simple>, [">= 0"])
-      s.add_development_dependency(%q<nokogiri>, [">= 0"])
-      s.add_development_dependency(%q<rspec>, [">= 2.0"])
-      s.add_development_dependency(%q<vcr>, ["~> 1.0"])
-      s.add_development_dependency(%q<fakeweb>, [">= 0"])
+      s.add_development_dependency(%q<rake>, ">= 0")
+      s.add_development_dependency(%q<json>, ">= 0")
+      s.add_development_dependency(%q<xml-simple>, ">= 0")
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('1.9')
+        s.add_development_dependency(%q<nokogiri>, ">= 0")
+      else
+        s.add_development_dependency(%q<nokogiri>, "~>1.5.0")
+      end
+      s.add_development_dependency(%q<rspec>, ">= 2.0")
+      s.add_development_dependency(%q<vcr>, "~> 1.0")
+      s.add_development_dependency(%q<fakeweb>, ">= 0")
     else
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<json>, [">= 0"])
