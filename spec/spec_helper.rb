@@ -39,7 +39,7 @@ module OEmbedSpecHelper
         "type" => "photo",
         "version" => "1.0",
         "fields" => "hello",
-        "__id__" => 1234
+        "__id__" => 1234,
       }
     when 'json'
       <<-JSON.strip

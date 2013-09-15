@@ -3,8 +3,8 @@
   request: !ruby/struct:VCR::Request
     method: :get
     uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fflickr.com%2Fphotos%2Fbees%2F2362225867%2F
-    body: !!null 
-    headers: !!null 
+    body: 
+    headers: 
   response: !ruby/struct:VCR::Response
     status: !ruby/struct:VCR::ResponseStatus
       code: 200
@@ -42,9 +42,9 @@
 - !ruby/struct:VCR::HTTPInteraction
   request: !ruby/struct:VCR::Request
     method: :get
-    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fflickr.com%2Fphotos%2Fbees%2F2362225867%2F404
-    body: !!null 
-    headers: !!null 
+    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Flawa%2F8263161881%2F404
+    body: 
+    headers: 
   response: !ruby/struct:VCR::Response
     status: !ruby/struct:VCR::ResponseStatus
       code: 404
@@ -79,9 +79,9 @@
 - !ruby/struct:VCR::HTTPInteraction
   request: !ruby/struct:VCR::Request
     method: :get
-    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fflickr.com%2Fphotos%2Fbees%2F2362225867%2F405
-    body: !!null 
-    headers: !!null 
+    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Flawa%2F8263161881%2F405
+    body: 
+    headers: 
   response: !ruby/struct:VCR::Response
     status: !ruby/struct:VCR::ResponseStatus
       code: 405
@@ -116,9 +116,9 @@
 - !ruby/struct:VCR::HTTPInteraction
   request: !ruby/struct:VCR::Request
     method: :get
-    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fflickr.com%2Fphotos%2Fbees%2F2362225867%2F500
-    body: !!null 
-    headers: !!null 
+    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Flawa%2F8263161881%2F500
+    body: 
+    headers: 
   response: !ruby/struct:VCR::Response
     status: !ruby/struct:VCR::ResponseStatus
       code: 500
@@ -153,9 +153,9 @@
 - !ruby/struct:VCR::HTTPInteraction
   request: !ruby/struct:VCR::Request
     method: :get
-    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fflickr.com%2Fphotos%2Fbees%2F2362225867%2F501
-    body: !!null 
-    headers: !!null 
+    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Flawa%2F8263161881%2F501
+    body: 
+    headers: 
   response: !ruby/struct:VCR::Response
     status: !ruby/struct:VCR::ResponseStatus
       code: 501
@@ -191,8 +191,8 @@
   request: !ruby/struct:VCR::Request
     method: :get
     uri: https://vimeo.com:443/api/oembed.json?url=https%3A%2F%2Fvimeo.com%2F31158841
-    body: !!null 
-    headers: !!null 
+    body: 
+    headers: 
   response: !ruby/struct:VCR::Response
     status: !ruby/struct:VCR::ResponseStatus
       code: 200
@@ -221,4 +221,47 @@
       frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen><\/iframe>","width":640,"height":512,"duration":120,"description":"A
       chance encounter and shared moment with one of natures greatest and most fleeting
       phenomena.","thumbnail_url":"https:\/\/secure-b.vimeocdn.com\/ts\/209\/801\/209801744_640.jpg","thumbnail_width":640,"thumbnail_height":512,"video_id":31158841}'
+    http_version: '1.1'
+- !ruby/struct:VCR::HTTPInteraction
+  request: !ruby/struct:VCR::Request
+    method: :get
+    uri: http://www.flickr.com:80/services/oembed/?format=json&url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Flawa%2F8263161881
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response
+    status: !ruby/struct:VCR::ResponseStatus
+      code: 200
+      message: OK
+    headers:
+      age:
+      - '0'
+      cache-control:
+      - private
+      content-type:
+      - application/json
+      date:
+      - Mon, 04 Mar 2013 04:01:52 GMT
+      p3p:
+      - policyref="http://info.yahoo.com/w3c/p3p.xml", CP="CAO DSP COR CUR ADM DEV
+        TAI PSA PSD IVAi IVDi CONi TELo OTPi OUR DELi SAMi OTRi UNRi PUBi IND PHY
+        ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE LOC GOV"
+      server:
+      - YTS/1.20.20
+      set-cookie:
+      - localization=en-us%3Bus%3Bus; expires=Mon, 02-Mar-2015 04:01:52 GMT; path=/;
+        domain=.flickr.com
+      - xb=36; expires=Thu, 05-Mar-2015 04:01:52 GMT; path=/; domain=.flickr.com
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      via:
+      - HTTP/1.1 r36.ycpi.mud.yahoo.net (YahooTrafficServer/1.20.20 [cMsSf ]), HTTP/1.1
+        r13.ycpi.sjb.yahoo.net UserFiberFramework/1.0
+      x-served-by:
+      - www141.flickr.mud.yahoo.com
+    body: ! '{"type":"photo","title":"A89176_7","author_name":"lawa","author_url":"http:\/\/www.flickr.com\/photos\/lawa\/","width":"1024","height":"687","url":"http:\/\/farm9.staticflickr.com\/8204\/8263161881_277f8faf60_b.jpg","web_page":"http:\/\/www.flickr.com\/photos\/lawa\/8263161881\/","thumbnail_url":"http:\/\/farm9.staticflickr.com\/8204\/8263161881_277f8faf60_s.jpg","thumbnail_width":75,"thumbnail_height":75,"web_page_short_url":"http:\/\/flic.kr\/p\/dAbS9i","license":"All
+      Rights Reserved","license_id":0,"version":"1.0","cache_age":3600,"provider_name":"Flickr","provider_url":"http:\/\/www.flickr.com\/"}
+
+'
     http_version: '1.1'

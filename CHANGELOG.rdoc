@@ -1,5 +1,11 @@
 = CHANGELOG
 
+== 0.9.0 - Unreleased
+
+* Removed the YAML-powered JSON parsing backend for security reasons (Marcos Wright Kuhns)
+* Added an OkJson-powered JSON parsing backend so that ruby-oembed can continue working without any dependencies on external gems (Marcos Wright Kuhns)
+* Fix gem dependencies to support continued development/testing in Ruby 1.8
+
 == 0.8.9 - 15 September 2013
 
 * SoundCloud provider supports https URLs; Pull #30 (Greg Tangey)
