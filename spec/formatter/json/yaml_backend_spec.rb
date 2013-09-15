@@ -7,7 +7,7 @@ describe "OEmbed::Formatter::JSON::Backends::Yaml" do
     lambda {
       OEmbed::Formatter::JSON.backend = 'Yaml'
     }.should_not raise_error
-    
+
     OEmbed::Formatter::JSON.backend.should == OEmbed::Formatter::JSON::Backends::OkJson
   end
 
