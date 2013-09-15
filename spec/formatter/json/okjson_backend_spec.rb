@@ -26,16 +26,24 @@ describe "OEmbed::Formatter::JSON::Backends::OkJson" do
     decoded.values.map{|v|v.to_s}.should == valid_response(:object).values.map{|v|v.to_s}
   end
 
-  describe "with Ruby < 2.0.0" do
-    it "should currently fail, for unknown reasons, given certain UTF8 characters" do
-      # NOTE: You can test this in the "real-world" using the following steps
-      #     OEmbed::Formatter::JSON.backend = 'OkJson'
-      #     OEmbed::Providers::Flickr.get 'http://flickr.com/photos/bees/2362225867/' #=> OEmbed::ParseError
+  if RUBY_VERSION >= '1.9.0' &&  RUBY_VERSION < '2.0.0'
+    describe "with Ruby 1.9.x" do
+      it "should currently fail, for unknown reasons, given certain UTF8 characters" do
+        # NOTE: You can test this in the "real-world" using the following steps
+        #     OEmbed::Formatter::JSON.backend = 'OkJson'
+        #     OEmbed::Providers::Flickr.get 'http://flickr.com/photos/bees/2362225867/' #=> OEmbed::ParseError
+        lambda {
+          OEmbed::Formatter.decode(:json, example_body(:flickr_utf8))
+        }.should raise_error(OEmbed::ParseError)
+      end
+    end
+  else # Ruby 1.8.x and Ruby 2.x seem to work, just fine
+    it "should correctly parse UTF8 characters" do
       lambda {
         OEmbed::Formatter.decode(:json, example_body(:flickr_utf8))
-      }.should raise_error(OEmbed::ParseError)
+      }.should_not raise_error(OEmbed::ParseError)
     end
-  end if RUBY_VERSION < '2.0.0'
+  end
 
   it "should raise an OEmbed::ParseError when decoding an invalid JSON String" do
     lambda {
