@@ -144,11 +144,9 @@ module OEmbed
     add_official_provider(Youtube)
 
     # Provider for flickr.com
-    Flickr = OEmbed::Provider.new("https://www.flickr.com/services/oembed/")
+    # http://developer.yahoo.com/blogs/ydn/posts/2008/05/oembed_embeddin/
+    Flickr = OEmbed::Provider.new("http://www.flickr.com/services/oembed/")
     Flickr << "http://*.flickr.com/*"
-    Flickr << "https://*.flickr.com/*"
-    Flickr << "http://flic.kr/*"
-    Flickr << "https://flic.kr/*"
     add_official_provider(Flickr)
 
     # Provider for viddler.com
@@ -363,5 +361,15 @@ module OEmbed
       Embedly << url
     end
     add_official_provider(Embedly, :aggregators)
+
+    # Provider for noembed.com, which is a provider aggregator. See
+    # OEmbed::Providers::Noembed.urls for a full list of supported url schemas.
+    # https://noembed.com/
+    Noembed = OEmbed::Provider.new("http://noembed.com/embed")
+    # Add all known URL regexps for Embedly. To update this list run `rake oembed:update_embedly`
+    YAML.load_file(File.join(File.dirname(__FILE__), "/providers/noembed_urls.yml")).each do |url|
+      Noembed << url
+    end
+    add_official_provider(Noembed, :aggregators)
   end
 end
